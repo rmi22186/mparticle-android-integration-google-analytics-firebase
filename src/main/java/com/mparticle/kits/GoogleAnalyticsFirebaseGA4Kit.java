@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class GoogleAnalyticsFirebaseKit extends KitIntegration implements KitIntegration.EventListener, KitIntegration.IdentityListener, KitIntegration.CommerceListener, KitIntegration.UserAttributeListener {
+public class GoogleAnalyticsFirebaseGA4Kit extends KitIntegration implements KitIntegration.EventListener, KitIntegration.IdentityListener, KitIntegration.CommerceListener, KitIntegration.UserAttributeListener {
     final static String USER_ID_FIELD_KEY = "userIdField";
     final static String USER_ID_CUSTOMER_ID_VALUE = "customerId";
     final static String USER_ID_EMAIL_VALUE = "email";
@@ -108,7 +108,7 @@ public class GoogleAnalyticsFirebaseKit extends KitIntegration implements KitInt
             return null;
         }
         Bundle bundle = getCommerceEventBundle(commerceEvent)
-        .getBundle();
+                .getBundle();
         switch (commerceEvent.getProductAction()) {
             case Product.ADD_TO_CART:
                 eventName = FirebaseAnalytics.Event.ADD_TO_CART;
@@ -167,7 +167,8 @@ public class GoogleAnalyticsFirebaseKit extends KitIntegration implements KitInt
     }
 
     @Override
-    public void onIdentifyCompleted(MParticleUser mParticleUser, FilteredIdentityApiRequest filteredIdentityApiRequest) {
+    public void onIdentifyCompleted(MParticleUser mParticleUser,
+            FilteredIdentityApiRequest filteredIdentityApiRequest) {
         setUserId(mParticleUser);
     }
 
@@ -330,7 +331,7 @@ public class GoogleAnalyticsFirebaseKit extends KitIntegration implements KitInt
     @Override
     public void onSetUserAttribute(String key, Object value, FilteredMParticleUser filteredMParticleUser) {
         if (value instanceof String) {
-            FirebaseAnalytics.getInstance(getContext()).setUserProperty(standardizeName(key, false), standardizeValue((String)value, false));
+            FirebaseAnalytics.getInstance(getContext()).setUserProperty(standardizeName(key, false), standardizeValue((String) value, false));
         }
     }
 
@@ -347,7 +348,7 @@ public class GoogleAnalyticsFirebaseKit extends KitIntegration implements KitInt
     @Override
     public void onSetAllUserAttributes(Map<String, String> userAttributes, Map<String, List<String>> userAttributeLists, FilteredMParticleUser filteredMParticleUser) {
         userAttributes = standardizeAttributes(userAttributes, false);
-        for (Map.Entry<String, String> entry: userAttributes.entrySet()) {
+        for (Map.Entry<String, String> entry : userAttributes.entrySet()) {
             FirebaseAnalytics.getInstance(getContext()).setUserProperty(entry.getKey(), entry.getValue());
         }
     }
@@ -358,7 +359,8 @@ public class GoogleAnalyticsFirebaseKit extends KitIntegration implements KitInt
     }
 
     @Override
-    public void onConsentStateUpdated(ConsentState consentState, ConsentState consentState1, FilteredMParticleUser filteredMParticleUser) {
+    public void onConsentStateUpdated(ConsentState consentState, ConsentState consentState1,
+            FilteredMParticleUser filteredMParticleUser) {
 
     }
 
@@ -396,7 +398,7 @@ public class GoogleAnalyticsFirebaseKit extends KitIntegration implements KitInt
         name = name.replaceAll("[^a-zA-Z0-9_\\s]", "");
         name = name.replaceAll("[\\s]+", "_");
 
-        for(String forbiddenPrefix: forbiddenPrefixes) {
+        for(String forbiddenPrefix : forbiddenPrefixes) {
             if (name.startsWith(forbiddenPrefix)) {
                 name = name.replaceFirst(forbiddenPrefix, "");
             }
